@@ -3,9 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>TODO Projesi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
-    
+    <div class="bg-gray-900 text-white flex items-center justify-center min-h-screen gap-8 p-8">
+        <div class="flex flex-col gap-6">
+            <input id="gorev-input" type="text" placeholder="Yeni görev ekle..." class="p-4 rounded-lg bg-gray-800 border border-blue-500/30 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <button id="ekle-btn" class="p-4 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl font-bold hover:scale-105 transition-transform shadow-lg">
+                Görev Ekle
+            </button>
+        </div>
+        <ul id="gorev-listesi" class="flex flex-col gap-4"></ul>
+    </div>
+    <script>
+        const input = document.getElementById('gorev-input');
+        const ekleBtn = document.getElementById('ekle-btn');
+        const liste = document.getElementById('gorev-listesi');
+
+        ekleBtn.addEventListener('click', () => {
+            console.log("Butona tıklandı!");
+        });
+
+        ekleBtn.addEventListener('click', () => {
+            const yazilanYazi = input.value.trim(); // .trim() ile baştaki ve sondaki boşlukları kaldırıyoruz
+            if (yazilanYazi !== "") {
+                console.log("Kullanıcı şunu yazdı:", yazilanYazi);
+                // Yeni görevi listeye ekleme işlemi burada yapılabilir
+                const yeniGorev = document.createElement('li');
+                yeniGorev.textContent = yazilanYazi;
+                liste.appendChild(yeniGorev);
+            }
+            else {
+                alert("Lütfen geçerli bir görev girin.");
+            }
+            input.value = "";
+            input.focus();
+        });
+    </script>
 </body>
 </html>
