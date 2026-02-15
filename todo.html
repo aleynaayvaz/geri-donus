@@ -7,15 +7,26 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
-    <div class="bg-gray-900 text-white flex items-center justify-center min-h-screen gap-8 p-8">
-        <div class="flex flex-col gap-6">
-            <input id="gorev-input" type="text" placeholder="Yeni görev ekle..." class="p-4 rounded-lg bg-gray-800 border border-blue-500/30 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <button id="ekle-btn" class="p-4 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl font-bold hover:scale-105 transition-transform shadow-lg">
-                Görev Ekle
+    <div class="bg-gray-900 text-white flex flex-col items-center justify-center min-h-screen p-8">
+        <h2 class="text-2xl font-bold">To-Do List Projesi</h2>
+        <div class="bg-gray-900 text-white flex flex-col items-center min-h-screen gap-8 p-8">
+            <div class="flex gap-6">
+                <input id="gorev-input" type="text" placeholder="Yeni görev ekle..." class="p-4 rounded-lg bg-gray-800 border border-blue-500/30 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <button id="ekle-btn" class="p-4 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl font-bold hover:scale-105 transition-transform shadow-lg">
+                    Görev Ekle
+                </button>
+            </div>
+            <h2 class="text-xl font-bold">Görev Listesi</h2>
+            <ul id="gorev-listesi" class=" w-full text-md">
+                <!-- Görevler burada görünecek -->
+            </ul>
+            <button id="geri-btn" class="fixed bottom-5 left-5 px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl font-bold hover:scale-105 transition-transform shadow-lg">
+                Anasayfaya Dön!
             </button>
         </div>
-        <ul id="gorev-listesi" class="flex flex-col gap-4"></ul>
+        
     </div>
+    
     <script>
         const input = document.getElementById('gorev-input');
         const ekleBtn = document.getElementById('ekle-btn');
@@ -26,19 +37,45 @@
         });
 
         ekleBtn.addEventListener('click', () => {
-            const yazilanYazi = input.value.trim(); // .trim() ile baştaki ve sondaki boşlukları kaldırıyoruz
+            const yazilanYazi = input.value.trim();
             if (yazilanYazi !== "") {
                 console.log("Kullanıcı şunu yazdı:", yazilanYazi);
-                // Yeni görevi listeye ekleme işlemi burada yapılabilir
                 const yeniGorev = document.createElement('li');
-                yeniGorev.textContent = yazilanYazi;
+                yeniGorev.className = "group flex justify-between items-center bg-gray-800 p-2 rounded-xl border border-blue-500/30 text-white mb-3 shadow-md transition-all hover:border-blue-500";
+                yeniGorev.innerHTML = `
+                    <span class="flex-1 px-3">${yazilanYazi}</span>
+                    <div class="flex gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button class="duzenle-btn text-blue-400 hover:text-blue-300 text-sm font-medium">Düzenle</button>
+                        <button class="sil-btn text-red-400 hover:text-red-300 text-sm font-medium">Sil</button>
+                    </div>
+                `;
                 liste.appendChild(yeniGorev);
+
+                const duzenleBtn = yeniGorev.querySelector('.duzenle-btn');
+                const gorevMetni = yeniGorev.querySelector('span'); 
+                duzenleBtn.addEventListener('click', () => {
+                    const mevcutMetin = gorevMetni.textContent;
+                    const yeniMetin = prompt("Görevi düzenle:", mevcutMetin);
+                    if (yeniMetin !== null && yeniMetin.trim() !== "") {
+                        gorevMetni.textContent = yeniMetin.trim();
+                    }
+                });       
+
+                const silBtn = yeniGorev.querySelector('.sil-btn');
+
+                silBtn.addEventListener('click', () => {
+                    liste.removeChild(yeniGorev);
+                });
             }
             else {
                 alert("Lütfen geçerli bir görev girin.");
             }
             input.value = "";
             input.focus();
+        });
+        const geriBtn = document.getElementById('geri-btn');
+        geriBtn.addEventListener('click', () => {
+            window.location.href = 'index.html';
         });
     </script>
 </body>
