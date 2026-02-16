@@ -15,11 +15,12 @@
                 <button id="ekle-btn" class="p-4 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl font-bold hover:scale-105 transition-transform shadow-lg">
                     Görev Ekle
                 </button>
+                <button id="geri-al-btn" class="hidden bg-purple-600 px-4 py-2 rounded shadow-md hover:bg-purple-500">
+                    Silineni Geri Al
+                </button>
             </div>
             <h2 class="text-xl font-bold">Görev Listesi</h2>
-            <ul id="gorev-listesi" class=" w-full text-md">
-                <!-- Görevler burada görünecek -->
-            </ul>
+            <ul id="gorev-listesi" class=" w-full text-md"></ul>
             <button id="geri-btn" class="fixed bottom-5 left-5 px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl font-bold hover:scale-105 transition-transform shadow-lg">
                 Anasayfaya Dön!
             </button>
@@ -28,19 +29,18 @@
     </div>
     
     <script>
+        let silinenlerYigini = []; 
         const input = document.getElementById('gorev-input');
         const ekleBtn = document.getElementById('ekle-btn');
         const liste = document.getElementById('gorev-listesi');
-
-        ekleBtn.addEventListener('click', () => {
-            console.log("Butona tıklandı!");
-        });
-
-        ekleBtn.addEventListener('click', () => {
-            const yazilanYazi = input.value.trim();
+        const geriAlBtn = document.getElementById('geri-al-btn');
+        const yazilanYazi = input.value.trim();
+        
+        function gorevEkle(yazilanYazi) {
             if (yazilanYazi !== "") {
-                console.log("Kullanıcı şunu yazdı:", yazilanYazi);
+                console.log("Görev ekle fonksiyonundayız if");
                 const yeniGorev = document.createElement('li');
+                document.getElementById('geri-al-btn').classList.add('hidden');
                 yeniGorev.className = "group flex justify-between items-center bg-gray-800 p-2 rounded-xl border border-blue-500/30 text-white mb-3 shadow-md transition-all hover:border-blue-500";
                 yeniGorev.innerHTML = `
                     <span class="flex-1 px-3">${yazilanYazi}</span>
@@ -64,15 +64,38 @@
                 const silBtn = yeniGorev.querySelector('.sil-btn');
 
                 silBtn.addEventListener('click', () => {
+                    const gorevText = gorevMetni.textContent;
+                    silinenlerYigini.push(gorevText);
+                    console.log("Silinen görev:", gorevText);
+                    console.log("Silinenler yığını:", silinenlerYigini);
+                    document.getElementById('geri-al-btn').classList.remove('hidden')
                     liste.removeChild(yeniGorev);
+                    hafizaYigini.push(gorevText);
                 });
             }
             else {
                 alert("Lütfen geçerli bir görev girin.");
+                console.log("Görev ekle fonksiyonundayız else");
             }
             input.value = "";
             input.focus();
+        };
+
+        ekleBtn.addEventListener('click', () => {
+            gorevEkle(input.value.trim());
         });
+
+        geriAlBtn.addEventListener('click', () => {
+            if (silinenlerYigini.length > 0) {
+                const geriAlinanGorev = silinenlerYigini.pop();
+                gorevEkle(geriAlinanGorev);
+                document.getElementById('geri-al-btn').classList.remove('hidden');
+            }
+            if (silinenlerYigini.length === 0) {
+                document.getElementById('geri-al-btn').classList.add('hidden');
+            }
+        });
+
         const geriBtn = document.getElementById('geri-btn');
         geriBtn.addEventListener('click', () => {
             window.location.href = 'index.html';
