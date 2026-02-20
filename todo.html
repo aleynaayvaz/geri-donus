@@ -33,12 +33,10 @@
         const input = document.getElementById('gorev-input');
         const ekleBtn = document.getElementById('ekle-btn');
         const liste = document.getElementById('gorev-listesi');
-        const geriAlBtn = document.getElementById('geri-al-btn');
-        const yazilanYazi = input.value.trim();
+        const geriAlBtn = document.getElementById('geri-al-btn');        
         
         function gorevEkle(yazilanYazi) {
             if (yazilanYazi !== "") {
-                console.log("Görev ekle fonksiyonundayız if");
                 const yeniGorev = document.createElement('li');
                 document.getElementById('geri-al-btn').classList.add('hidden');
                 yeniGorev.className = "group flex justify-between items-center bg-gray-800 p-2 rounded-xl border border-blue-500/30 text-white mb-3 shadow-md transition-all hover:border-blue-500";
@@ -50,6 +48,7 @@
                     </div>
                 `;
                 liste.appendChild(yeniGorev);
+                hafizayaKaydet();
 
                 const duzenleBtn = yeniGorev.querySelector('.duzenle-btn');
                 const gorevMetni = yeniGorev.querySelector('span'); 
@@ -58,28 +57,30 @@
                     const yeniMetin = prompt("Görevi düzenle:", mevcutMetin);
                     if (yeniMetin !== null && yeniMetin.trim() !== "") {
                         gorevMetni.textContent = yeniMetin.trim();
+                        hafizayaKaydet();
                     }
                 });       
 
                 const silBtn = yeniGorev.querySelector('.sil-btn');
-
                 silBtn.addEventListener('click', () => {
                     const gorevText = gorevMetni.textContent;
                     silinenlerYigini.push(gorevText);
-                    console.log("Silinen görev:", gorevText);
-                    console.log("Silinenler yığını:", silinenlerYigini);
                     document.getElementById('geri-al-btn').classList.remove('hidden')
                     liste.removeChild(yeniGorev);
-                    hafizaYigini.push(gorevText);
+                    hafizayaKaydet();
                 });
             }
             else {
                 alert("Lütfen geçerli bir görev girin.");
-                console.log("Görev ekle fonksiyonundayız else");
             }
             input.value = "";
             input.focus();
         };
+
+        function hafizayaKaydet() {
+            const tumGorevler = [...document.querySelectorAll('#gorev-listesi li span')].map(span => span.textContent);
+            localStorage.setItem('yapilacaklar', JSON.stringify(tumGorevler));
+            };
 
         ekleBtn.addEventListener('click', () => {
             gorevEkle(input.value.trim());
@@ -100,6 +101,16 @@
         geriBtn.addEventListener('click', () => {
             window.location.href = 'index.html';
         });
+        
+        window.onload = function() {
+            const veriler = JSON.parse(localStorage.getItem('yapilacaklar'));
+            if (veriler) {
+                veriler.forEach(gorev => {
+                    gorevEkle(gorev); // Hafızadaki her bir görev için ekleme fonksiyonunu çalıştır
+                });
+            }
+        };
+
     </script>
 </body>
 </html>
