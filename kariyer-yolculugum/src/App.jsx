@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './App.css'
 
 function App() {
@@ -8,11 +8,26 @@ function App() {
  const [duzenlenecekIndex, setDuzenlenecekIndex] = useState(null)
  const [duzenlenecekMetin, setDuzenlenecekMetin] = useState("")
   
+useEffect(() => {
+  const kayitliGorevler = JSON.parse(localStorage.getItem('gorevler'))
+  if (kayitliGorevler) {
+    setGorevler(kayitliGorevler)
+  }
+}, [])
+
+useEffect(() => {
+  if (gorevler.length > 0) {
+    localStorage.setItem('gorevler', JSON.stringify(gorevler))
+  }
+}, [gorevler])
+
 
 function gorevEkle() {
     if (inputDegeri.trim() === "") return
     setGorevler([...gorevler, inputDegeri])
     setInputDegeri("")
+    console.log(localStorage.getItem('gorevler'), "localdeki görevler görev ekle")
+
   }
 
   function gorevSil(index) {
