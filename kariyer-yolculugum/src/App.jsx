@@ -26,9 +26,8 @@ useEffect(() => {
 
 function gorevEkle() {
     if (inputDegeri.trim() !== "") {
-      setGorevler([...gorevler, inputDegeri])
+      setGorevler([...gorevler, {metin: inputDegeri, tamamlandi: false}])
       setInputDegeri("")
-      console.log(localStorage.getItem('gorevler'), "localdeki görevler görev ekle")
       setHataMetni("")
     } else 
       setHataMetni("Lütfen geçerli bir görev girin.")
@@ -37,7 +36,7 @@ function gorevEkle() {
   function gorevSil(index) {
     const yeniListe = gorevler.filter((_, i) => i !== index)
     setGorevler(yeniListe)
-    setSilinenler([...silinenler, gorevler[index]])
+    setSilinenler([...silinenler, gorevler[index].metin])
   }
 
   function silineniGeriAl () {
@@ -47,15 +46,20 @@ function gorevEkle() {
 
   function gorevDuzenle (index) {
     setDuzenlenecekIndex(index)
-    setDuzenlenecekMetin(gorevler[index])
+    setDuzenlenecekMetin(gorevler[index].metin)
   }
 
   function gorevKaydet (index) {
-    const yeniListe = gorevler.map((gorev, i) => i === index ? duzenlenecekMetin : gorev)
+    const yeniListe = gorevler.map((gorev, i) => i === index ? {...gorev, metin: duzenlenecekMetin } : gorev)
     setGorevler(yeniListe)
     setDuzenlenecekIndex(null)
   }
 
+  function gorevTamamla(index) {
+    const yeniListe = gorevler.map((gorev, i) => i === index ? {...gorev, tamamlandi: !gorev.tamamlandi } : gorev)
+    setGorevler(yeniListe)
+    console.log(gorevler, "tamamlandı mı")
+  }
 
   return (
     <div className="min-h-screen bg-gray-900 text-white flex flex-col items-center p-8">
@@ -68,6 +72,11 @@ function gorevEkle() {
               value={inputDegeri}
               onChange={(e) => setInputDegeri(e.target.value)}
               placeholder="Yeni görev ekle..."
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  gorevEkle()
+                }
+              }}
             />
             {hataMetni && <p className="mt-2 text-sm text-red-500">{hataMetni}</p> }
           </div>
@@ -91,6 +100,7 @@ function gorevEkle() {
             duzenlenecekIndex={duzenlenecekIndex}
             duzenlenecekMetin={duzenlenecekMetin}
             setDuzenlenecekMetin={setDuzenlenecekMetin}
+            gorevTamamla={gorevTamamla}
           />
         ))}
       </ul>
