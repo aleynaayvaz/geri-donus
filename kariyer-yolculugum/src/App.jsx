@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import './App.css'
+import GorevItem from './components/GorevItem'
 
 function App() {
  const [gorevler, setGorevler] = useState([])
@@ -80,21 +81,17 @@ function gorevEkle() {
       <h2 className="gap-3 mt-8 text-xl font-bold ">Görev Listesi</h2>
       <ul className="w-full mt-6">
         {gorevler.map((gorev, index) => (
-          <li className="group w-full flex justify-between items-center bg-gray-800 p-2 rounded-xl border border-blue-500/30 text-white mb-3 shadow-md transition-all hover:border-blue-500" key={index}> {index === duzenlenecekIndex ? 
-          <input
-            className="px-3 bg-gray-700 rounded text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-            value={duzenlenecekMetin}
-            onChange={(e) => setDuzenlenecekMetin(e.target.value)}
-          /> : 
-          <span className="mx-2">{gorev}</span> }
-          {index === duzenlenecekIndex ?
-          <button className="text-blue-400 hover:text-blue-300 text-sm font-medium" onClick={() => gorevKaydet(index)}>Kaydet</button> :
-          <div className="flex gap-3 opacity-0 group-hover:opacity-100 transition-opacity"> 
-            <button className="text-blue-400 hover:text-blue-300 text-sm font-medium" onClick={() => gorevDuzenle(index)}>Düzenle</button>
-            <button className="text-red-400 hover:text-red-300 text-sm font-medium" onClick={() => gorevSil(index)}>Sil</button>
-          </div>
-          }
-          </li>
+          <GorevItem 
+            key={index} 
+            index={index}
+            gorev={gorev}
+            gorevSil={gorevSil}
+            gorevDuzenle={gorevDuzenle}
+            gorevKaydet={gorevKaydet}
+            duzenlenecekIndex={duzenlenecekIndex}
+            duzenlenecekMetin={duzenlenecekMetin}
+            setDuzenlenecekMetin={setDuzenlenecekMetin}
+          />
         ))}
       </ul>
       </div>
