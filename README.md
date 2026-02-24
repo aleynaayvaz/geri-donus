@@ -1,6 +1,6 @@
 # My Career Journey
 
-I graduated from Computer Engineering in 2021. After getting married and having my son, 
+I graduated from Computer Engineering in 2022. After getting married and having my son, 
 I had to pause my career. Now I'm back — learning every night after my 1.5-year-old goes to sleep.
 
 ## Projects
